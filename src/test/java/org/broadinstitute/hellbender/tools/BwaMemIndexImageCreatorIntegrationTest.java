@@ -1,9 +1,11 @@
 package org.broadinstitute.hellbender.tools;
 
+import org.apache.spark.sql.catalyst.plans.logical.Except;
 import org.broadinstitute.hellbender.BwaMemTestUtils;
 import org.broadinstitute.hellbender.CommandLineProgramTest;
 import org.broadinstitute.hellbender.utils.bwa.BwaMemIndex;
 import org.broadinstitute.hellbender.utils.test.BaseTest;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -33,6 +35,22 @@ public class BwaMemIndexImageCreatorIntegrationTest extends CommandLineProgramTe
             BwaMemTestUtils.assertCorrectSingleReadAlignment(index);
             BwaMemTestUtils.assertCorrectChimericContigAlignment(index);
         }
+    }
+
+    @Test
+    public void testImageFileGenerationFromIndexFiles() throws Exception {
+        final File imgFile = createTempFile("test-img-file", ".img");
+        final List<String> args = new ArrayList<>(Arrays.asList(
+                "--input", testReferenceFasta.getAbsolutePath(),
+                "--output", imgFile.getAbsolutePath(),
+                "--" + BwaMemIndexImageCreator.USE_EXISTING_INDEX_FULL_NAME));
+        runCommandLine(args);
+        Assert.assertTrue(imgFile.exists());
+        try( final BwaMemIndex index = new BwaMemIndex(imgFile.getAbsolutePath()) ){
+            BwaMemTestUtils.assertCorrectSingleReadAlignment(index);
+            BwaMemTestUtils.assertCorrectChimericContigAlignment(index);
+        }
+        Assert.assertTrue(imgFile.delete());
     }
 
 }
