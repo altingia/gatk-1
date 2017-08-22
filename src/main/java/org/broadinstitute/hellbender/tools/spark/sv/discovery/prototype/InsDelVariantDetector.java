@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
-final class ForSimpleInsDel implements VariantDetectorFromLongReadAlignments {
+final class InsDelVariantDetector implements VariantDetectorFromLongReadAlignments {
 
     public void inferSvAndWriteVCF(final JavaRDD<AlignedContig> longReads, final String vcfOutputFileName,
                                    final Broadcast<ReferenceMultiSource> broadcastReference, final String fastaReference,
@@ -29,7 +29,7 @@ final class ForSimpleInsDel implements VariantDetectorFromLongReadAlignments {
         // convert to ChimericAlignment, similar to ChimericAlignment.parseOneContig(final AlignedContig, final int), except the head/tail filtering
         final JavaPairRDD<byte[], List<ChimericAlignment>> chimericAlignments =
                 longReads
-                        .mapToPair(ForSimpleInsDel::convertAlignmentIntervalToChimericAlignment);
+                        .mapToPair(InsDelVariantDetector::convertAlignmentIntervalToChimericAlignment);
 
         // usual business as in DiscoverVariantsFromContigAlignmentsSAMSpark#discoverVariantsAndWriteVCF()
         final JavaRDD<VariantContext> annotatedVariants =

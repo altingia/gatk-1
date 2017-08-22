@@ -103,7 +103,7 @@ public final class InternalCpxSvDiscoverFromLongReadsSpark extends GATKSparkTool
             splitUpLongReads.forEach((k, v) -> writeSAM(v, k.name(), reads, headerBroadcast, outputDir, localLogger));
         }
 
-        new ForSimpleInsDel()
+        new InsDelVariantDetector()
                 .inferSvAndWriteVCF(splitUpLongReads.get(RawTypes.InsDel), outputDir+"/"+RawTypes.InsDel.name()+".vcf",
                         ctx.broadcast(getReference()), discoverStageArgs.fastaReference, getAuthenticatedGCSOptions(),
                         localLogger);
