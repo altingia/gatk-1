@@ -107,7 +107,7 @@ public final class InternalFilterLongReadAlignmentsSAMSpark extends GATKSparkToo
         }
     }
 
-    private static String formatContigInfo(final Tuple2<String, List<String>> pair) {
+    static String formatContigInfo(final Tuple2<String, List<String>> pair) {
         return "(" + pair._1 + ",[" + pair._2 + "])";
     }
 

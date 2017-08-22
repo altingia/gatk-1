@@ -34,7 +34,10 @@ public final class FileUtils {
         }
     }
 
-    public static boolean createDirInBucketToWriteTo(final String pathString) {
+    /**
+     * Creates a directory, in local FS, HDFS, or Google buckets to write to.
+     */
+    public static boolean createDirToWriteTo(final String pathString) {
         try {
             Utils.nonNull(pathString);
             if ( java.nio.file.Files.exists(java.nio.file.Paths.get(pathString)) )
